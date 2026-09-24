@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08121d" />
+    <meta name="description" content="Bonds Mobile GPS signal dashboard" />
+    <title>Bonds Mobile · GPS Signal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Bonds Mobile home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>BONDS <em>MOBILE</em></span>
+        </a>
+        <div class="topbar-meta"><span class="live-dot"></span><span>DEVICE LINK</span><span class="mono" id="session-time">--:--:--</span></div>
+      </header>
+
+      <main>
+        <section class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> NETWORK UTILITY / 01</p>
+            <h1>Know exactly<br /><i>where you are.</i></h1>
+            <p class="lede">A private, browser-native signal check for your current coordinates, device identity, and local time zone.</p>
+            <div class="hero-actions">
+              <button class="primary-button" id="locate-button" type="button"><span class="button-icon">⌖</span><span id="locate-label">Connect to GPS</span><span class="arrow">↗</span></button>
+              <p class="privacy-note"><span aria-hidden="true">◉</span> Location stays in this browser</p>
+            </div>
+          </div>
+          <div class="orbital-card" aria-label="GPS signal visualization">
+            <div class="orbital-grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+            <div class="crosshair horizontal"></div><div class="crosshair vertical"></div><div class="signal-core"><span class="core-pulse"></span><span class="core-dot"></span></div>
+            <div class="orbital-label label-north">N <span>001°</span></div><div class="orbital-label label-east">E <span>090°</span></div><div class="orbital-label label-south">S <span>181°</span></div><div class="orbital-label label-west">W <span>270°</span></div>
+            <div class="orbital-caption"><span class="caption-status" id="orbital-status-dot"></span><span id="orbital-status">AWAITING SIGNAL</span></div>
+          </div>
+        </section>
+
+        <section class="dashboard" aria-live="polite">
+          <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> LIVE READOUT</p><h2>Signal details</h2></div><span class="status-chip" id="status-chip">NOT CONNECTED</span></div>
+          <div class="readout-grid">
+            <article class="readout-card location-card"><div class="card-top"><span class="card-index">01</span><span class="card-icon">⌖</span></div><div class="card-label">CURRENT LOCATION</div><div class="location-value" id="location-value">Connect to reveal<br /><span>your coordinates</span></div><div class="coordinates" id="coordinates">LAT --.------- &nbsp; / &nbsp; LNG --.-------</div><div class="card-footer"><span class="mini-dot"></span><span id="accuracy-value">ACCURACY —</span></div></article>
+            <article class="readout-card"><div class="card-top"><span class="card-index">02</span><span class="card-icon">▣</span></div><div class="card-label">DEVICE PROFILE</div><div class="device-value" id="device-name">Waiting for device</div><div class="device-type" id="device-type">—</div><dl class="spec-list"><div><dt>Platform</dt><dd id="platform-value">—</dd></div><div><dt>Language</dt><dd id="language-value">—</dd></div></dl></article>
+            <article class="readout-card time-card"><div class="card-top"><span class="card-index">03</span><span class="card-icon">◷</span></div><div class="card-label">LOCAL TIME ZONE</div><div class="timezone-value" id="timezone-value">Detecting…</div><div class="clock-value" id="clock-value">--:-- <span>--</span></div><div class="time-footer"><span id="offset-value">UTC —</span><span class="mono" id="date-value">—</span></div></article>
+          </div>
+        </section>
+
+        <section class="info-strip"><div class="info-icon">i</div><p><strong>How it works</strong> Bonds Mobile uses your browser’s secure Geolocation API to request a one-time GPS reading. Your location is never uploaded or stored by this page.</p><button class="text-button" id="refresh-button" type="button">Refresh reading <span>↻</span></button></section>
+      </main>
+      <footer><span>© 2026 BONDS MOBILE</span><span class="mono">GPS / LOCAL-FIRST / 01</span></footer>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
