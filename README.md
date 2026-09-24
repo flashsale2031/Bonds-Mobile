@@ -13,6 +13,10 @@ This repository now includes a self-contained browser GPS dashboard in [`index.h
 
 No location data is sent to a server or stored by the page. The dashboard stays locked until permission is granted, and renders the coordinate readout only from the approved GPS result. GPS access requires a secure context (HTTPS or localhost) and user permission. A static site cannot grant permission through a file or code; the browser's native approval prompt is the security boundary.
 
+## Site navigation
+
+The home page includes a responsive Bonds Mobile header menu. Each menu object has its own standalone page under [`pages/`](./pages/): Account, Your Device, Your Number, Data & Usage, Hotspot, Security & Privacy, Support, and About.
+
 ### Run locally
 
 ```bash
