@@ -51,6 +51,41 @@ function setStatus(status, label) {
   $("orbital-status-dot").style.background = status === "error" ? "#ff8b72" : status === "connected" ? "var(--lime)" : "#91a4a3";
 }
 
+function renderPermissionState(permissionState) {
+  const card = $("permission-card");
+  const title = $("permission-title");
+  const description = $("permission-description");
+  const stateLabel = $("permission-state");
+  const button = $("locate-button");
+  card.classList.remove("permission-granted", "permission-denied", "permission-error");
+  if (permissionState === "granted") {
+    card.classList.add("permission-granted");
+    title.textContent = "GPS permission approved";
+    description.textContent = "Precise location is available for this session.";
+    stateLabel.textContent = "APPROVED";
+    return;
+  }
+  if (permissionState === "denied") {
+    card.classList.add("permission-denied");
+    title.textContent = "GPS permission blocked";
+    description.textContent = "Allow location in your browser settings, then try again.";
+    stateLabel.textContent = "BLOCKED";
+    $("locate-label").textContent = "Try GPS again";
+    return;
+  }
+  if (permissionState === "unsupported") {
+    card.classList.add("permission-error");
+    title.textContent = "GPS is not supported";
+    description.textContent = "Use a modern browser with location services enabled.";
+    stateLabel.textContent = "UNAVAILABLE";
+    button.disabled = true;
+    return;
+  }
+  title.textContent = "GPS permission required";
+  description.textContent = "Approve precise location access to unlock the live readout.";
+  stateLabel.textContent = "WAITING";
+}
+
 function formatCoordinates(position) {
   const { latitude, longitude, accuracy } = position.coords;
   $("location-value").innerHTML = `${latitude.toFixed(4)}° ${latitude >= 0 ? "N" : "S"}<br /><span>${Math.abs(longitude).toFixed(4)}° ${longitude >= 0 ? "E" : "W"}</span>`;
@@ -59,7 +94,7 @@ function formatCoordinates(position) {
 }
 
 function locate() {
-  if (!navigator.geolocation) {
+  if (!window.GPSPermissions?.isSupported) {
     setStatus("error", "NOT SUPPORTED");
     $("location-value").innerHTML = "GPS unavailable<br /><span>in this browser</span>";
     showToast("This browser does not support GPS location.");
@@ -68,20 +103,20 @@ function locate() {
   setStatus("pending", "REQUESTING GPS");
   $("locate-label").textContent = "Reading signal…";
   $("locate-button").disabled = true;
-  navigator.geolocation.getCurrentPosition((position) => {
+  window.GPSPermissions.request().then((position) => {
     state.lastPosition = position;
     formatCoordinates(position);
     setStatus("connected", "SIGNAL CONNECTED");
     $("locate-label").textContent = "Refresh GPS reading";
     $("locate-button").disabled = false;
     showToast("GPS signal connected.");
-  }, (error) => {
+  }).catch((error) => {
     const message = error.code === 1 ? "Location permission was denied." : error.code === 2 ? "Your device could not find a GPS signal." : "The GPS request timed out.";
     setStatus("error", "SIGNAL ERROR");
     $("locate-label").textContent = "Try GPS again";
     $("locate-button").disabled = false;
     showToast(message);
-  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
+  });
 }
 
 detectDevice();
@@ -89,3 +124,5 @@ updateClock();
 setInterval(updateClock, 1000);
 $("locate-button").addEventListener("click", locate);
 $("refresh-button").addEventListener("click", locate);
+window.GPSPermissions.onChange(renderPermissionState);
+window.GPSPermissions.sync().then(renderPermissionState);

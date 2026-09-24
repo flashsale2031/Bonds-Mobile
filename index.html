@@ -28,6 +28,11 @@
             <h1>Know exactly<br /><i>where you are.</i></h1>
             <p class="lede">A private, browser-native signal check for your current coordinates, device identity, and local time zone.</p>
             <div class="hero-actions">
+              <div class="permission-card" id="permission-card" role="status">
+                <div class="permission-shield">⌁</div>
+                <div class="permission-copy"><strong id="permission-title">GPS permission required</strong><span id="permission-description">Approve precise location access to unlock the live readout.</span></div>
+                <span class="permission-state" id="permission-state">WAITING</span>
+              </div>
               <button class="primary-button" id="locate-button" type="button"><span class="button-icon">⌖</span><span id="locate-label">Connect to GPS</span><span class="arrow">↗</span></button>
               <p class="privacy-note"><span aria-hidden="true">◉</span> Location stays in this browser</p>
             </div>
@@ -54,6 +59,7 @@
       <footer><span>© 2026 BONDS MOBILE</span><span class="mono">GPS / LOCAL-FIRST / 01</span></footer>
     </div>
     <div class="toast" id="toast" role="status"></div>
+    <script src="./permissions.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

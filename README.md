@@ -4,14 +4,14 @@ Fast and reliable 5G data network.
 
 ## GPS Signal Console
 
-This repository now includes a self-contained browser GPS dashboard in [`index.html`](./index.html). It uses the browser's secure `navigator.geolocation` API to request a one-time location reading after the user presses **Connect to GPS**. The page displays:
+This repository now includes a self-contained browser GPS dashboard in [`index.html`](./index.html). The dedicated [`permissions.js`](./permissions.js) module checks the browser's Geolocation permission state and only requests a precise reading after the user presses **Connect to GPS** and approves the native browser prompt. The page displays:
 
 - Current latitude and longitude, plus an accuracy estimate
 - A best-effort device name and device type from browser platform information
 - Local time zone, UTC offset, live clock, language, and platform
 - Clear permission, loading, success, unsupported-browser, and error states
 
-No location data is sent to a server or stored by the page. GPS access requires a secure context (HTTPS or localhost) and user permission.
+No location data is sent to a server or stored by the page. The dashboard stays locked until permission is granted, and renders the coordinate readout only from the approved GPS result. GPS access requires a secure context (HTTPS or localhost) and user permission. A static site cannot grant permission through a file or code; the browser's native approval prompt is the security boundary.
 
 ### Run locally
 
